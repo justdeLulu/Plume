@@ -1,0 +1,25 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator db {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+  previewFeatures      = ["prismaSchemaFolder"]
+}
+
+model ForbiddenWords {
+  id        String   @id @default(cuid())
+  content   String
+  word      String
+  createdAt DateTime @default(now())
+}
+
+model Mistakes {
+  id        String   @id @default(cuid())
+  content   String   @unique
+  createdAt DateTime @default(now())
+}
