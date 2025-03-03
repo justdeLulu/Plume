@@ -1,11 +1,27 @@
 model Rule {
-    id          String   @id @default(cuid())
-    power       Int
-    name        String
-    description String
-    active      Boolean? @default(false)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @default(now())
+    id String @id @default(cuid())
+
+    name              String
+    description       String
+    number            Int
+    power             Int
+    applicationDomain RuleApplicationDomain @default(ALL)
+    updatedAt         DateTime              @updatedAt
+    createdAt         DateTime              @default(now())
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+
+    status   RuleStatus? @relation(fields: [statusId], references: [id])
+    statusId String?     @unique
 
     @@map("rules")
+}
+
+enum RuleApplicationDomain {
+    ALL
+    FREE_TIME
+    WORK
+    OUTSIDE
+    PLAY_TIME
 }

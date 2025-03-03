@@ -1,10 +1,11 @@
-from config import *
-from utils import *
+import logging
+
 from nextcord import Embed, ApplicationInvokeError, Forbidden, Interaction, DiscordServerError, Color
 from nextcord.ext.commands import Bot as NextcordBot
 from datetime import datetime
-import logging
 from prisma import Prisma
+
+from utilities.logger import Logger
 
 class Bot(NextcordBot):
     def __init__(self, *args, **kwargs):
@@ -14,6 +15,9 @@ class Bot(NextcordBot):
         self.logger = Logger("bot", "logs/bot.log", print_level=logging.DEBUG)
         self.loaded_cogs: dict[str, int] = {} # {cog path: last modified time}
 
+        self.subject_id = 939288874281222225
+        self.log_channel = 1344820579626258464
+        self.safe_channels = [1344815506917560330]
         self.prisma = Prisma()
         
     # Prevents errors from being printed twice

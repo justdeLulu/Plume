@@ -1,0 +1,12 @@
+model RuleStatus {
+    id String @id @default(cuid())
+
+    active        Boolean   @default(true)
+    disableUntill DateTime?
+    updatedAt     DateTime  @updatedAt
+
+    ruleId String @unique
+    Rule   Rule?
+
+    @@map("rules_status")
+}

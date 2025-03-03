@@ -1,16 +1,17 @@
-from bot import Bot
+import os
+import logging
 import nextcord
+
 from dotenv import load_dotenv
-import os, logging
 
 from prisma.utils import async_run
 
-from utils.logger import Logger
-from utils.shared_functions import get_cogs
+from utilities.logger import Logger
+from utilities.cogs import get_cogs
 
+from bot import Bot
 
 def main():
-    
     # Create the logs folder if it doesn't exist
     if not os.path.exists("logs"):
         os.mkdir("logs")
@@ -26,11 +27,13 @@ def main():
     
     # Get the token from the environment variables
     token = os.getenv("TOKEN")
+
     if not token:
         bot.logger.critical("No token found in the environment variables, please ensure that you have a .env file in the root directory of the project with a TOKEN variable")
         exit(1)
 
     # Try to load all the cogs
+    os.chdir("src")
     for cog in get_cogs():
         try:
             bot.load_extension(cog)

@@ -1,0 +1,12 @@
+model BannedWords {
+    id          String   @id @default(cuid())
+    name        String
+    description String
+    trigger     String
+    usage       Int      @default(0)
+    active      Boolean? @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now())
+
+    @@map("talk_banned_words")
+}

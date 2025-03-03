@@ -1,0 +1,142 @@
+from config import *
+from views import *
+from bot import Bot
+from nextcord import Interaction, Embed, slash_command
+from nextcord.ext.commands import Cog
+from views.page_buttons import PageButtons
+
+from nextcord.ui import Modal, TextInput
+
+import nextcord
+import prisma
+
+questions = [
+    {
+        'id': 'name',
+        'label': 'Nom de la Chienne et de son proprietaire.',
+        'filled': 'Chienne, Detenu par Lulu'
+    },
+                {
+        'id': 'dates',
+        'label': 'Dates',
+        'filled': 'Format: HH:MM '
+    },
+]
+class ReportTwoModal(nextcord.ui.Modal):
+    def __init__(self, dateAndTime: str):
+        super().__init__(
+            title="Feedback",
+            custom_id="report_modal:feedback",
+            timeout=None,
+        )
+        
+        self.dateTimeAnswer = dateAndTime
+
+        self.rating = nextcord.ui.TextInput(
+            label="How would you rate the bot out of 10?",
+            placeholder="10",
+            max_length=2,
+            custom_id="report_modal:rating",
+        )
+        self.add_item(self.rating)
+
+        self.improve = nextcord.ui.TextInput(
+            label="How could the bot improve?",
+            placeholder="e.g. add more features, improve the UI, etc.",
+            style=nextcord.TextInputStyle.paragraph,
+            required=False,
+            custom_id="report_modal:improve",
+        )
+        self.add_item(self.improve)
+
+    async def callback(self, interaction: nextcord.Interaction):
+        await interaction.send(
+            f"Feedback pt.2 from {interaction.user.mention}:\n"
+            f"Time Answer: {self.dateTimeAnswer}\n"
+        )
+
+class ReportModal(nextcord.ui.Modal):
+    def __init__(self):
+        super().__init__(
+            title="Feedback",
+            custom_id="report_modal:feedback",
+            timeout=None,
+        )
+
+        self.dateAndTime = nextcord.ui.TextInput(
+            label="Antécédents",
+            placeholder="date au format DD/MM/YYYY HH:MM de la ",
+            required=True,
+            style=nextcord.TextInputStyle.short,
+            custom_id="report_modal:dateAndTime",
+        )
+        self.add_item(self.dateAndTime)
+
+        self.rating = nextcord.ui.TextInput(
+            label="How would you rate the bot out of 10?",
+            placeholder="10",
+            max_length=2,
+            custom_id="report_modal:rating",
+        )
+        self.add_item(self.rating)
+
+        self.improve = nextcord.ui.TextInput(
+            label="How could the bot improve?",
+            placeholder="e.g. add more features, improve the UI, etc.",
+            style=nextcord.TextInputStyle.paragraph,
+            required=False,
+            custom_id="report_modal:improve",
+        )
+        self.add_item(self.improve)
+        
+        self.improved = nextcord.ui.TextInput(
+            label="How could the bot improve?",
+            placeholder="e.g. add more features, improve the UI, etc.",
+            style=nextcord.TextInputStyle.paragraph,
+            required=False,
+            custom_id="report_modal:improved",
+        )
+        self.add_item(self.improved)
+        
+        self.improved2 = nextcord.ui.TextInput(
+            label="How could the bot improve?",
+            placeholder="e.g. add more features, improve the UI, etc.",
+            style=nextcord.TextInputStyle.paragraph,
+            required=False,
+            custom_id="report_modal:improved2",
+        )
+        self.add_item(self.improved2)
+
+    async def callback(self, interaction: nextcord.Interaction):
+        
+        await interaction.send(
+            f"Nouveau rapport de {interaction.user.mention}:\n"
+            f"Rating: {self.rating.value}\n"
+        )
+        
+class ReportCommands(Cog):
+    def __init__(self, bot: Bot):
+        self.bot = bot
+
+    @slash_command(
+        name="reports",
+        description="Commandes pour les Rapports",
+        guild_ids=GUILD_IDS
+    )
+    async def reports(self, interaction: Interaction):
+        pass
+
+    @reports.subcommand(
+        name="create",
+        description="Créer un nouveau Rapport"
+    )
+    async def create(self, interaction: Interaction):
+        await interaction.response.send_modal(ReportModal())
+        await interaction.response
+        await interaction.response.send_modal(ReportTwoModal("sasa"))
+        
+
+
+def setup(bot: Bot):
+    bot.add_cog(ReportCommands(bot))
+    

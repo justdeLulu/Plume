@@ -1,0 +1,18 @@
+model User {
+    id String @id @default(cuid())
+
+    name        String
+    displayName String
+
+    discordId String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    rules        Rule[]
+    orders       Order[]
+    reports      Report[]
+    talkMistakes TalkMistakes[]
+
+    @@map("users")
+}

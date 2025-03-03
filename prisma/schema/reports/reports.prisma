@@ -1,0 +1,20 @@
+model Report {
+    id String @id @default(cuid())
+
+    subject   String
+    power     Int
+    color     StateColorEnum
+    createdAt DateTime       @default(now())
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+
+    @@map("reports")
+}
+
+enum StateColorEnum {
+    PURPLE
+    GREEN
+    ORANGE
+    RED
+}

@@ -1,0 +1,48 @@
+from config import *
+from utils import *
+from bot import Bot
+from nextcord.ext.commands import Cog
+from nextcord.ext import commands
+from nextcord import Interaction, slash_command
+
+from prisma.models import ForbiddenWords
+
+import nextcord
+
+class ForbiddenWords(Cog):
+    def __init__(self, bot: Bot):
+        self.bot = bot
+        
+    async def upsertMistake(self, content: str, word: str):
+        await self.bot.prisma.forbiddenwords.create(
+            data={
+                'content': content,
+                'word': word.lower(),
+            },
+        )
+        
+    @slash_command(guild_ids=GUILD_IDS, description="HELLOO", force_global=True)
+    async def test(self, interaction: Interaction):
+        item = await self.bot.prisma.forbiddenwords.count()
+        print(item)
+        await interaction.send(f"Tu as fait {items} erreurs!")
+
+
+    @commands.Cog.listener("on_message")
+    async def on_message(self, message: nextcord.Message):
+        if message.author.id == SUBJECT_ID:
+            words: list[str] = message.content.lower().split(' ');
+            count = await self.bot.prisma.forbiddenwords.count()
+            
+            if "oui" in words:
+                msg = f"**{message.author.display_name}** Shush! C'est la {count} eme fois... On dis Woof **Puppy**."
+                await message.channel.send(msg)
+                await self.upsertMistake(message.content, 'oui')
+
+            if "non" in words:
+                msg = f"**{message.author.display_name}** Shush! C'est la {count} eme fois... On dis Woof Woof **Puppy**."
+                await message.channel.send(msg)
+                await self.upsertMistake(message.content, 'non')
+
+def setup(bot: Bot):
+    bot.add_cog(ForbiddenWords(bot))

@@ -19,16 +19,27 @@ class RulesCommand(Cog):
 
     @slash_command(description="Rules", guild_ids=GUILD_IDS)
     async def rules(self, interaction: Interaction):
+        pass
+
+    @rules.subcommand(description="Display Rules")
+    async def show(self, interaction: Interaction):
         rules = await self.bot.prisma.rule.find_many(
             where={
-              'active': True,  
+              'status': {
+                  'is': {
+                      'active': True
+                  }
+              } 
             },
             order={
                 'power': 'asc'
+            },
+            include={
+                'status': True,
             }
         )
-        print(rules)
         
+        print(rules)
         
         # Create a list of embeds
         embeds = list(map(buildRuleEmbed, rules))
@@ -38,6 +49,15 @@ class RulesCommand(Cog):
         
         # Send a message with the first embed and attach the view
         await interaction.send(embed=embeds[0], view=view, ephemeral=False)
+
+
+    @rules.subcommand(description="Add")
+    async def add(self, interaction: Interaction):
+        """
+        This is a subcommand of the '/main' slash command.
+        It will appear in the menu as '/main sub1'.
+        """
+        await interaction.response.send_message("Add")
 
 
 def setup(bot: Bot):

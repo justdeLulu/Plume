@@ -29,9 +29,9 @@ class OnReady(Cog):
             self.bot.loaded_cogs = {cog: os.path.getmtime(module_to_file(cog)) for cog in get_cogs()}
 
         # Set the bot's status
-        await self.bot.change_presence(activity=Activity(type=ActivityType.watching, name="Plume 1.0.0"))
+        await self.bot.change_presence(activity=Activity(type=ActivityType.watching, name="Je sais, tu sais, on sais. Mais quand?"))
         
-        self.bot.logger.info("We have logged in as", self.bot.user)
+        # self.bot.logger.info("We have logged in as", self.bot.user)
 
 def setup(bot: Bot):
     bot.add_cog(OnReady(bot))

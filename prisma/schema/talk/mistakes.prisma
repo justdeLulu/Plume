@@ -1,0 +1,18 @@
+model TalkMistakes {
+    id      String      @id @default(cuid())
+    trigger TriggerType
+    where   String?
+    when    DateTime    @default(now())
+    userId  String
+    user    User        @relation(fields: [userId], references: [id])
+
+    @@map("talk_mistakes")
+}
+
+enum TriggerType {
+    OWNER
+    SUPERIOR
+    BANNED_WORDS
+    MUZZLED
+    SPEECH
+}
