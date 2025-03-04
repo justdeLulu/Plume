@@ -1,14 +1,12 @@
 from nextcord import Interaction, Embed, Color
 from prisma import Prisma
 
+
 async def reportTalkMistake(
-    prismaClient: Prisma,
-    discordUserId: int,
-    trigger: str,
-    where: int
+    prismaClient: Prisma, discordUserId: int, trigger: str, where: int
 ):
     """|coro|
-    
+
     Send a success message to an interaction
 
     Parameters
@@ -21,16 +19,14 @@ async def reportTalkMistake(
         If the response is only visible to the user, by default True
     """
 
-    user = await prismaClient.user.find_first(where={
-        'discordId': str(discordUserId)
-    })
-    
+    user = await prismaClient.user.find_first(where={"discordId": str(discordUserId)})
+
     await prismaClient.talkmistakes.create(
         data={
-            'userId': user.id,
-            'trigger': trigger,
-            'where': str(where),
+            "userId": user.id,
+            "trigger": trigger,
+            "where": str(where),
         }
     )
-    
-    print('Saved data.')
+
+    print("Saved data.")

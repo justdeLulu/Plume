@@ -1,8 +1,11 @@
 from nextcord import Interaction, Embed, Color
 
-async def sendSuccessMessage(interaction: Interaction, message: str, ephemeral: bool = True):
+
+async def sendSuccessMessage(
+    interaction: Interaction, message: str, ephemeral: bool = True
+):
     """|coro|
-    
+
     Send a success message to an interaction
 
     Parameters

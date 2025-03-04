@@ -1,32 +1,38 @@
 import configuration as _config
 import os as _os
 
+
 def file_to_module(root: str, filepath: str) -> str:
     """Converts a filepath to a module path
-    
+
     Parameters
     ----------
     root: :class:`str`
         The root directory
     filepath: :class:`str`
         The filepath to convert
-        
+
     Returns
     -------
     :class:`str`
         The module path
     """
-    return _os.path.join(root, filepath).removesuffix(".py").replace("\\", ".").replace("/", ".")
+    return (
+        _os.path.join(root, filepath)
+        .removesuffix(".py")
+        .replace("\\", ".")
+        .replace("/", ".")
+    )
 
 
 def module_to_file(filepath: str) -> str:
     """Converts a module path to a filepath
-    
+
     Parameters
     ----------
     filepath: :class:`str`
         The module path to convert
-        
+
     Returns
     -------
     :class:`str`
@@ -37,7 +43,7 @@ def module_to_file(filepath: str) -> str:
 
 def get_cogs():
     """Returns a set of all the cogs
-    
+
     Returns
     -------
     :class:`set`
