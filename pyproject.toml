@@ -15,6 +15,9 @@ dependencies = [
 [tool.poetry]
 package-mode = false
 
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+
 [tool.pyright]
 include = ["main.py"]
 
